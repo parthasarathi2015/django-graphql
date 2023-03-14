@@ -1,0 +1,41 @@
+
+{% block content %}
+<h1>Business Info:</h1>
+<h2><a href="{% url 'business_create' %}">+ Add</a></h2>
+  {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+          {% endfor %}
+      </ul>
+  {% endif %}
+
+<ul>
+  <table width="90%" cellpadding="0" cellspacing="1" border="1" class="" bgcolor="#ffffff" align="center">
+    <tr>
+        <th>Serial No</th><th>Name</th><th>Description</th><th>Employee Size</th><th>Address</th><th>Office Phone</th><th>Owner Name</th><th>Website</th><th>Action</th>
+    </tr>
+    
+      {% for bsns in businesses %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><a href="{% url 'business_detail' pk=bsns.pk %}">{{ bsns.name }}</a></td>
+            <td>{{ bsns.description }}</td>
+            <td>{{ bsns.employee_size }}</td>
+            <td>{{ bsns.address }}</td>
+            <td>{{ bsns.phone_number }}</td>                    
+            <td>{{ bsns.owner_name }}</td>
+            <td>{{ bsns.website }}</td>
+            <td><a href="{% url 'business_delete' pk=bsns.pk %}">Delete</a></td>
+            
+        </tr>
+        {% empty %}
+            <tr><td colspan="8" aligm="center">No business info available!</td></tr>  
+      {% endfor %}
+    
+  </table>
+</ul>
+
+
+{% endblock %}
+

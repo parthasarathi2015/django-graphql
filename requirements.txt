@@ -1,0 +1,5 @@
+djangorestframework
+graphene-django
+django-filter
+pytest-django
+pytest-html
