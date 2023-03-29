@@ -87,3 +87,21 @@ def test_business_update_view(client):
     response = client.post(url, data)
     assert response.status_code == 302
     assert Business.objects.count() == 1
+
+@pytest.mark.django_db
+def test_business_delete_view(client):
+    business = Business.objects.create(
+        name='Demo Test Business',
+        description='Demo Test description',
+        employee_size=10,
+        address='Demo Test address',
+        phone_number='555-1234',
+        owner_name='Demo Test owner',
+        owner_phone_number='555-4321',
+        website='https://www.abcd.com/'
+    )
+    url = reverse(f'business_delete', args=[business.pk])
+   
+    response = client.delete(url)
+    assert response.status_code == 302
+    assert Business.objects.count() == 0

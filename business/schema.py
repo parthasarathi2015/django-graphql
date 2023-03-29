@@ -6,12 +6,33 @@ from .models import Business
 class BusinessType(DjangoObjectType):
     class Meta:
         model = Business
-        filter_fields = ['name', 'address','owner_name','website']
+        # filter_fields = ['name', 'address','owner_name','website']
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'name': ['exact', 'icontains', 'istartswith'],
+            'address': [ 'icontains'],
+            'owner_name': ['exact', 'icontains', 'istartswith'],
+            'website': ['exact'],
+        }
         interfaces = (graphene.relay.Node, )
 
 class Query(graphene.ObjectType):
     business = graphene.relay.Node.Field(BusinessType)
     all_businesses = DjangoFilterConnectionField(BusinessType)
+    business_by_name = graphene.Field(BusinessType,name=graphene.String(required=True))
+    business_by_owner_name = graphene.Field(BusinessType,ownername=graphene.String(required=True))
+    
+    def resolve_business_by_name(root, info, name):
+        try:
+            return Business.objects.get(name=name)
+        except Business.DoesNotExist:
+            return None
+
+    def resolve_business_by_owner_name(root, info, ownername):
+        try:
+            return Business.objects.get(owner_name=ownername)
+        except Business.DoesNotExist:
+            return None
 
 class CreateBusiness(graphene.Mutation):
     class Arguments:

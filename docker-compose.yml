@@ -1,15 +1,12 @@
 version: '3.5'
 
 services:
-
   django:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - DJANGO_SECRET_KEY
     
-    command: gunicorn appname.wsgi -c gunicorn.cfg.py
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/usr/src/app
    
